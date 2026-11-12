@@ -1,0 +1,21 @@
+services:
+  auth-service:
+    build: ../auth-service
+    restart: unless-stopped
+    volumes:
+      - ./auth_db.sqlite3:/app/auth_db.sqlite3
+
+  core-service:
+    build: ../core-service
+    restart: unless-stopped
+    volumes:
+      - ./core_db.sqlite3:/app/core_db.sqlite3
+
+  frontend:
+    build: ../frontend
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    depends_on:
+      - auth-service
+      - core-service
